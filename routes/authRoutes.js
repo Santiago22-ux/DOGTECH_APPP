@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const db = require('../config/db');
+const bcrypt = require('bcryptjs');
 
 // POST /api/auth/registro
 router.post('/registro', async (req, res) => {
@@ -74,3 +75,18 @@ router.post('/login', async (req, res) => {
 });
 
 module.exports = router;
+const db = require('../config/db');
+
+router.post('/register', async (req, res) => {
+    try {
+        const { nombre, email, password } = req.body;
+        const [result] = await db.query(
+            'INSERT INTO usuarios (nombre, email, password) VALUES (?, ?, ?)',
+            [nombre, email, password]
+        );
+        res.status(201).json({ message: 'Usuario registrado con éxito', id: result.insertId });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+});

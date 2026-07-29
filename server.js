@@ -2,25 +2,31 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 
-const authRoutes = require('./routes/authRoutes');
-const citasRoutes = require('./routes/citasRoutes');
-
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 // Middlewares
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Servir archivos estáticos de la carpeta "public"
+// Archivos estáticos (Frontend)
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Rutas de la API
+// Rutas API
+const authRoutes = require('./routes/authRoutes');
+const citasRoutes = require('./routes/citasRoutes');
+
 app.use('/api/auth', authRoutes);
 app.use('/api/citas', citasRoutes);
 
-// Iniciar servidor
+// Ruta principal para servir el Frontend
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Puerto dinámico asignado por Render (process.env.PORT)
+const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
-    console.log(`Servidor de DogTech ejecutándose en http://localhost:${PORT}`);
+    console.log(`🚀 Servidor ejecutándose en el puerto ${PORT}`);
 });
