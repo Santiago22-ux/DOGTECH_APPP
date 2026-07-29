@@ -5,7 +5,7 @@ const app = express();
 
 app.use(cors()); // 2. Habilitar CORS para todas las rutas
 app.use(express.json()); // 3. Asegurar que parsea JSON
-const app = express();
+
 
 // Middlewares
 app.use(cors());
