@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DogTech - Panel de Citas</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f6f8; }
+        .header { display: flex; justify-content: space-between; align-items: center; }
+        .grid { display: flex; gap: 40px; margin-top: 20px; }
+        .card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); width: 380px; }
+        form { display: flex; flex-direction: column; gap: 12px; }
+        input, textarea, button { padding: 10px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px; }
+        button { background-color: #28a745; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #218838; }
+        table { width: 100%; border-collapse: collapse; background: white; margin-top: 10px; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 id="bienvenida">Bienvenido</h1>
+        <button onclick="cerrarSesion()" style="background-color: #dc3545;">Cerrar Sesión</button>
+    </div>
+
+    <div class="grid">
+        <!-- Formulario Citas -->
+        <div class="card">
+            <h2>Agendar Nueva Cita</h2>
+            <form id="form-cita">
+                <input type="text" id="mascota" placeholder="Nombre de la mascota" required>
+                <input type="text" id="especie" placeholder="Especie / Raza (ej: Perro / Poodle)" required>
+                <textarea id="motivo" placeholder="Motivo de la consulta" rows="3" required></textarea>
+                <input type="datetime-local" id="fecha" required>
+                <button type="submit">Agendar Cita</button>
+            </form>
+            <div id="msg-cita"></div>
+        </div>
+
+        <!-- Tabla de Citas -->
+        <div style="flex-grow: 1;">
+            <h2>Mis Citas Programadas</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mascota</th>
+                        <th>Especie/Raza</th>
+                        <th>Motivo</th>
+                        <th>Fecha y Hora</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-citas">
+                    <!-- Filas cargadas dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Cargar citas al entrar al Dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            const usuario = JSON.parse(localStorage.getItem('dogtech_user'));
+            if (!usuario) {
+                window.location.href = 'index.html';
+                return;
+            }
+            document.getElementById('bienvenida').innerText = `Bienvenido, ${usuario.nombre}`;
+            cargarCitas();
+        });
+    </script>
+</body>
+</html>
