@@ -27,3 +27,8 @@ pool.getConnection()
 
 // Exportación directa
 module.exports = pool;
+const db = mysql.createConnection({ ... });
+
+db.then(connection => {  // <--- AQUÍ DA EL ERROR porque 'db' no es una Promesa
+    console.log('Conectado a la BD');
+});
