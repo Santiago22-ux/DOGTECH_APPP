@@ -1,52 +1,41 @@
-const mensajeError = document.getElementById('mensajeError');
+const express = require('express');
+const cors = require('cors');
+const path = require('path');
 
-registroForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-  // Ocultar mensaje previo al intentar de nuevo
-  mensajeError.style.display = 'none';
-  mensajeError.textContent = '';
+// Middlewares necesarios
+app.use(cors());
+app.use(express.json()); // OBLIGATORIO para leer req.body en formato JSON
+app.use(express.urlencoded({ extended: true }));
 
-  const nombre = document.getElementById('nombre').value;
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
+// Servir archivos estáticos (HTML, CSS, JS del frontend)
+app.use(express.static(path.join(__dirname, 'public'))); 
+// Nota: Si tus HTML están en la raíz, cambia 'public' por '.'
 
-  try {
-    const response = await fetch('https://dogtech-appp.onrender.com/api/auth/registro', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ nombre, email, password })
-    });
+// Endpoint de Registro
+app.post('/api/auth/registro', (req, res) => {
+    const { nombre, email, password } = req.body;
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      // Si el servidor responde con 400 (correo en uso, datos inválidos, etc.)
-      mensajeError.style.color = '#ff4d4d'; // Rojo para error
-      
-      // Si el backend te devuelve un mensaje tipo "El correo ya está registrado"
-      // o personalizas el texto directamente si el código es 400:
-      mensajeError.textContent = data.mensaje || 'El correo electrónico ya está en uso';
-      mensajeError.style.display = 'block';
-      return;
+    // Validación simple en el backend
+    if (!nombre || !email || !password) {
+        return res.status(400).json({ 
+            mensaje: 'Faltan campos obligatorios (nombre, email, password)' 
+        });
     }
 
-    // Si todo sale bien (Código 200 / 201)
-    mensajeError.style.color = '#28a745'; // Verde para éxito
-    mensajeError.textContent = '¡Usuario registrado con éxito!';
-    mensajeError.style.display = 'block';
+    // AQUÍ IRÍA LA LÓGICA DE TU BASE DE DATOS (MySQL)
+    // Ejemplo simulado exitoso:
+    console.log('Usuario a registrar:', { nombre, email });
 
-    // Opcional: Redirigir al login después de 2 segundos
-    /* setTimeout(() => {
-         window.location.href = 'login.html';
-       }, 2000); 
-    */
+    return res.status(201).json({ 
+        mensaje: 'Usuario registrado con éxito',
+        usuario: { nombre, email } 
+    });
+});
 
-  } catch (error) {
-    mensajeError.style.color = '#ff4d4d';
-    mensajeError.textContent = 'Error de conexión con el servidor.';
-    mensajeError.style.display = 'block';
-  }
+// Arrancar el servidor
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en el puerto ${PORT}`);
 });

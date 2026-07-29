@@ -4,157 +4,111 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DogTech - Crear Cuenta</title>
-    <!-- Agrega aquí tus estilos CSS si los tienes en un archivo externo -->
     <style>
-        /* Puedes mantener tus estilos CSS existentes aquí */
         body {
+            background-color: #121212;
+            color: #ffffff;
             font-family: Arial, sans-serif;
-            background-color: #1a1a1a;
-            color: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
         }
-        .register-card {
-            background-color: #2a2a2a;
+        .card {
+            background-color: #1e1e1e;
             padding: 30px;
             border-radius: 12px;
             width: 100%;
-            max-width: 400px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            max-width: 360px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
             text-align: center;
         }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        input {
-            width: 100%;
+        .card h2 { margin-bottom: 20px; }
+        .input-group { margin-bottom: 15px; }
+        .input-group input {
+            width: 92%;
             padding: 12px;
             border-radius: 6px;
-            border: 1px solid #444;
-            background-color: #333;
+            border: 1px solid #333;
+            background-color: #2a2a2a;
             color: #fff;
-            box-sizing: border-box;
+            outline: none;
         }
         button {
             width: 100%;
             padding: 12px;
-            border-radius: 6px;
             border: none;
-            background-color: #555;
+            border-radius: 6px;
+            background-color: #383838;
             color: #fff;
             font-weight: bold;
             cursor: pointer;
+            transition: 0.3s;
         }
-        button:hover {
-            background-color: #666;
-        }
-        a {
-            color: #64b5f6;
-            text-decoration: none;
-        }
+        button:hover { background-color: #505050; }
+        a { color: #3b82f6; text-decoration: none; font-size: 0.9em; }
     </style>
 </head>
 <body>
 
-    <div class="register-card">
+    <div class="card">
         <h2>🐶 DogTech</h2>
         <h3>Crear Cuenta</h3>
 
         <form id="registroForm">
-            <div class="form-group">
+            <div class="input-group">
                 <input type="text" id="nombre" placeholder="Nombre completo" required>
             </div>
-            <div class="form-group">
+            <div class="input-group">
                 <input type="email" id="email" placeholder="Correo electrónico" required>
             </div>
-            <div class="form-group">
+            <div class="input-group">
                 <input type="password" id="password" placeholder="Contraseña" required>
             </div>
-
             <button type="submit" id="btnSubmit">Registrarse</button>
         </form>
-<form id="registroForm">
-  <!-- Tus campos actuales de nombre, correo, contraseña -->
-  <input type="text" id="nombre" placeholder="Nombre completo" required>
-  <input type="email" id="email" placeholder="Correo electrónico" required>
-  <input type="password" id="password" placeholder="Contraseña" required>
 
-  <button type="submit" id="btnRegistro">Registrarse</button>
-
-  <!-- AGREGA ESTA LÍNEA PARA MOSTRAR EL MENSAJE DEBAJO -->
-  <p id="mensajeError" style="color: #ff4d4d; margin-top: 10px; font-size: 14px; text-align: center; display: none;"></p>
-</form>
-        <p style="margin-top: 20px; font-size: 14px;">
+        <p style="margin-top: 15px;">
             ¿Ya tienes cuenta? <a href="/login.html">Inicia sesión aquí</a>
         </p>
     </div>
 
     <script>
-        const form = document.getElementById('registroForm');
-        const btnSubmit = document.getElementById('btnSubmit');
-
-        form.addEventListener('submit', async (e) => {
+        document.getElementById('registroForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // Deshabilitar botón durante el envío
+            const btnSubmit = document.getElementById('btnSubmit');
+            btnSubmit.innerText = 'Registrando...';
             btnSubmit.disabled = true;
-            btnSubmit.textContent = 'Registrando...';
 
             const nombre = document.getElementById('nombre').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
             try {
-                // AQUÍ ESTÁ LA CORRECCIÓN CLAVE: Usar '/api/registro' con barra inicial
-         // Prueba cambiando la URL a /api/auth/registro
-const response = await fetch('/api/auth/registro', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ nombre, email, password })
-});
+                const response = await fetch('/api/auth/registro', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ nombre, email, password })
+                });
+
                 const data = await response.json();
 
                 if (response.ok) {
-                    alert(data.mensaje || '¡Usuario registrado con éxito!');
-                    window.location.href = '/login.html'; // Redirigir al login
+                    alert('¡Registro exitoso!');
+                    // window.location.href = '/login.html';
                 } else {
-                    alert(data.mensaje || `Error al registrar usuario (Código: ${response.status})`);
+                    alert(`Error (${response.status}): ${data.mensaje || 'Error al registrar'}`);
                 }
             } catch (error) {
-                console.error('Error de red o servidor:', error);
-                alert('No se pudo conectar con el servidor. Revisa tu conexión.');
-
-                try {
-    const response = await fetch('/api/auth/registro', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ nombre, email, password })
-    });
-
-    // Si la respuesta NO es OK (ej. 404 o 500)
-    if (!response.ok) {
-        throw new Error(`El servidor respondió con estado ${response.status}`);
-    }
-
-    const data = await response.json();
-    alert(data.mensaje || '¡Usuario registrado con éxito!');
-    window.location.href = '/login.html';
-
-} catch (error) {
-    console.error('Error:', error);
-    alert('Error al registrar usuario. Verifica la ruta o el servidor.');
-}
+                console.error('Error de red:', error);
+                alert('No se pudo conectar con el servidor.');
             } finally {
-                // Restaurar botón
+                btnSubmit.innerText = 'Registrarse';
                 btnSubmit.disabled = false;
-                btnSubmit.textContent = 'Registrarse';
             }
         });
     </script>
