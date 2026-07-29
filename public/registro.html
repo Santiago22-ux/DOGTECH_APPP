@@ -81,15 +81,22 @@
       };
 
       try {
-        const URL_BACKEND = 'https://dogtech-appp.onrender.com/registro.html';
-
-const respuesta = await fetch(`${URL_BACKEND}/api/registro`, {
+       const response = await fetch('https://dogtech-appp.onrender.com/api/registro', {
   method: 'POST',
-  headers: { 
-    'Content-Type': 'application/json' 
+  headers: {
+    'Content-Type': 'application/json'
   },
-  body: JSON.stringify(datosUsuario)
+  body: JSON.stringify(datos)
 });
+
+const response = await fetch('/api/registro', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(datos)
+});
+
 
         // Intentar obtener el mensaje de respuesta desde el backend
         const resultado = await respuesta.json().catch(() => ({}));
