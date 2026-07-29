@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const db = require('../config/db');
-const bcrypt = require('bcryptjs');
+
 
 // POST /api/auth/registro
 router.post('/registro', async (req, res) => {
