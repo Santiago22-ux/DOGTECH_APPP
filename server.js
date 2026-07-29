@@ -1,4 +1,3 @@
-const registroForm = document.getElementById('registroForm');
 const mensajeError = document.getElementById('mensajeError');
 
 registroForm.addEventListener('submit', async (e) => {
