@@ -1,75 +1,72 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DogTech - Panel de Citas</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f6f8; }
-        .header { display: flex; justify-content: space-between; align-items: center; }
-        .grid { display: flex; gap: 40px; margin-top: 20px; }
-        .card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); width: 380px; }
-        form { display: flex; flex-direction: column; gap: 12px; }
-        input, textarea, button { padding: 10px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px; }
-        button { background-color: #28a745; color: white; border: none; cursor: pointer; }
-        button:hover { background-color: #218838; }
-        table { width: 100%; border-collapse: collapse; background: white; margin-top: 10px; }
-        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
-        th { background-color: #f2f2f2; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DogTech - Panel Principal</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; }
+    header { background-color: #0056b3; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+    .btn-logout { background-color: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
+    .container { padding: 40px; max-width: 1000px; margin: auto; text-align: center; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 30px; }
+    .card-mod { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer; transition: transform 0.2s; }
+    .card-mod:hover { transform: translateY(-5px); }
+    .card-mod h3 { color: #0056b3; margin-bottom: 10px; }
+    .icon { font-size: 40px; margin-bottom: 10px; }
+  </style>
 </head>
 <body>
-    <div class="header">
-        <h1 id="bienvenida">Bienvenido</h1>
-        <button onclick="cerrarSesion()" style="background-color: #dc3545;">Cerrar Sesión</button>
-    </div>
 
+  <header>
+    <h2>🐶 DogTech - Sistema Veterinario</h2>
+    <div>
+      <span id="saludo">¡Hola!</span>
+      <button class="btn-logout" onclick="cerrarSesion()">Cerrar Sesión</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <h2>¿Qué deseas hacer hoy?</h2>
+    
     <div class="grid">
-        <!-- Formulario Citas -->
-        <div class="card">
-            <h2>Agendar Nueva Cita</h2>
-            <form id="form-cita">
-                <input type="text" id="mascota" placeholder="Nombre de la mascota" required>
-                <input type="text" id="especie" placeholder="Especie / Raza (ej: Perro / Poodle)" required>
-                <textarea id="motivo" placeholder="Motivo de la consulta" rows="3" required></textarea>
-                <input type="datetime-local" id="fecha" required>
-                <button type="submit">Agendar Cita</button>
-            </form>
-            <div id="msg-cita"></div>
-        </div>
+      <div class="card-mod" onclick="alert('Módulo de Agendar Cita en desarrollo')">
+        <div class="icon">📅</div>
+        <h3>Agendar Cita</h3>
+        <p>Programa consultas médicas o de aseo para mascotas.</p>
+      </div>
 
-        <!-- Tabla de Citas -->
-        <div style="flex-grow: 1;">
-            <h2>Mis Citas Programadas</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Mascota</th>
-                        <th>Especie/Raza</th>
-                        <th>Motivo</th>
-                        <th>Fecha y Hora</th>
-                        <th>Estado</th>
-                    </tr>
-                </thead>
-                <tbody id="tabla-citas">
-                    <!-- Filas cargadas dinámicamente -->
-                </tbody>
-            </table>
-        </div>
+      <div class="card-mod" onclick="alert('Módulo de Buscar Mascota en desarrollo')">
+        <div class="icon">🔍</div>
+        <h3>Buscar Mascota</h3>
+        <p>Consulta el historial clínico y los datos del paciente.</p>
+      </div>
+
+      <div class="card-mod" onclick="alert('Módulo de Registro de Mascota en desarrollo')">
+        <div class="icon">🐾</div>
+        <h3>Registrar Mascota</h3>
+        <p>Añade un nuevo paciente al sistema veterinario.</p>
+      </div>
+
+      <div class="card-mod" onclick="alert('Módulo de Medicamentos/Vacunas en desarrollo')">
+        <div class="icon">💉</div>
+        <h3>Vacunas e Historial</h3>
+        <p>Revisa esquemas de vacunación pendientes.</p>
+      </div>
     </div>
+  </div>
 
-    <script src="app.js"></script>
-    <script>
-        // Cargar citas al entrar al Dashboard
-        document.addEventListener('DOMContentLoaded', () => {
-            const usuario = JSON.parse(localStorage.getItem('dogtech_user'));
-            if (!usuario) {
-                window.location.href = 'index.html';
-                return;
-            }
-            document.getElementById('bienvenida').innerText = `Bienvenido, ${usuario.nombre}`;
-            cargarCitas();
-        });
-    </script>
+  <script>
+    // Recuperar el nombre guardado en el login
+    const usuario = localStorage.getItem('usuarioNombre');
+    if (usuario) {
+      document.getElementById('saludo').innerText = '¡Hola, ' + usuario + '! ';
+    }
+
+    function cerrarSesion() {
+      localStorage.removeItem('usuarioNombre');
+      window.location.href = 'login.html';
+    }
+  </script>
 </body>
 </html>
