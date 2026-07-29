@@ -1,4 +1,9 @@
-// Detecta la URL base automáticamente (funciona tanto en local como en Render)
+const express = require('express');
+const cors = require('cors'); // 1. Importar cors
+const app = express();
+
+app.use(cors()); // 2. Habilitar CORS para todas las rutas
+app.use(express.json()); // 3. Asegurar que parsea JSON// Detecta la URL base automáticamente (funciona tanto en local como en Render)
 const API_URL = window.location.origin;
 
 // ==========================================
