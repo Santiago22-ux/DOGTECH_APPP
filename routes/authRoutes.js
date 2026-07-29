@@ -8,7 +8,7 @@ const db = require('../config/db'); // Importación principal de la BD
 // ==========================================
 
 // Registro de usuarios
-router.post('/register', async (req, res) => {
+router.post('/registro', async (req, res) => {
     const { nombre, email, password } = req.body;
 
     if (!nombre || !email || !password) {

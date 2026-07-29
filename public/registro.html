@@ -99,14 +99,14 @@
 
             try {
                 // AQUÍ ESTÁ LA CORRECCIÓN CLAVE: Usar '/api/registro' con barra inicial
-                const response = await fetch('/api/registro', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ nombre, email, password })
-                });
-
+         // Prueba cambiando la URL a /api/auth/registro
+const response = await fetch('/api/auth/registro', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ nombre, email, password })
+});
                 const data = await response.json();
 
                 if (response.ok) {
@@ -118,6 +118,29 @@
             } catch (error) {
                 console.error('Error de red o servidor:', error);
                 alert('No se pudo conectar con el servidor. Revisa tu conexión.');
+
+                try {
+    const response = await fetch('/api/auth/registro', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ nombre, email, password })
+    });
+
+    // Si la respuesta NO es OK (ej. 404 o 500)
+    if (!response.ok) {
+        throw new Error(`El servidor respondió con estado ${response.status}`);
+    }
+
+    const data = await response.json();
+    alert(data.mensaje || '¡Usuario registrado con éxito!');
+    window.location.href = '/login.html';
+
+} catch (error) {
+    console.error('Error:', error);
+    alert('Error al registrar usuario. Verifica la ruta o el servidor.');
+}
             } finally {
                 // Restaurar botón
                 btnSubmit.disabled = false;
