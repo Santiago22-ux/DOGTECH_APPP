@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const db = require('../config/db'); // Importación principal de la BD
 
 // ==========================================
@@ -63,16 +62,8 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ message: 'Credenciales inválidas' });
         }
 
-        // Generar Token JWT
-        const token = jwt.sign(
-            { id: user.id, email: user.email },
-            process.env.JWT_SECRET || 'secretkey',
-            { expiresIn: '2h' }
-        );
-
         res.json({
             message: 'Inicio de sesión exitoso',
-            token,
             user: {
                 id: user.id,
                 nombre: user.nombre,
